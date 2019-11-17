@@ -1,5 +1,7 @@
 package com.adisavaspring.rest.springrestapp.security;
 
+import com.adisavaspring.rest.springrestapp.SpringApplicationContext;
+
 public class SecurityConstants {
 
 //    token expiration time
@@ -7,6 +9,9 @@ public class SecurityConstants {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
     public static final String SIGN_UP_URL = "/users";
-    public static final String TOKEN_SECRET = "jfsdfer3xdsf";
 
+    public static String getTokenSecret(){
+        AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("appProperties");
+        return appProperties.getTokenSecret();
+    }
 }

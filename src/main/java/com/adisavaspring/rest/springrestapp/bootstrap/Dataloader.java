@@ -17,6 +17,8 @@ public class Dataloader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+
+        if(repository.count() == 0) {
             UserEntity userEntity = new UserEntity();
             userEntity.setUserId("fdsfsd");
             userEntity.setEncryptedPassword("fdsfd");
@@ -24,5 +26,6 @@ public class Dataloader implements ApplicationListener<ContextRefreshedEvent> {
             userEntity.setLastName("sdfsdfsd");
             userEntity.setEmail("guguu.com");
             repository.save(userEntity);
+        }
     }
 }

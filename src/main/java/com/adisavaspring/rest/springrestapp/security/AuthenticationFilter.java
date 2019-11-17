@@ -1,6 +1,9 @@
 package com.adisavaspring.rest.springrestapp.security;
 
+import com.adisavaspring.rest.springrestapp.SpringApplicationContext;
 import com.adisavaspring.rest.springrestapp.model.request.UserLoginRequestModel;
+import com.adisavaspring.rest.springrestapp.services.UserService;
+import com.adisavaspring.rest.springrestapp.shared.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,11 +22,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter {
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public final AuthenticationManager authenticationManager;
 
-    public AuthentificationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -52,9 +55,13 @@ public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter
         String token = Jwts.builder()
                 .setSubject(userName)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
                 .compact();
 
+        UserService userServiceBean = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+        UserDto userDto = userServiceBean.getUser(userName);
+
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        response.addHeader("UserId", userDto.getUserId());
     }
 }
