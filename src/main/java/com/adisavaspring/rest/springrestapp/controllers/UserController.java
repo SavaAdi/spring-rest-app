@@ -5,6 +5,7 @@ import com.adisavaspring.rest.springrestapp.model.response.UserRest;
 import com.adisavaspring.rest.springrestapp.services.UserService;
 import com.adisavaspring.rest.springrestapp.shared.UserDto;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public UserRest getUsers(@PathVariable String id){
 
         UserRest userRest = new UserRest();
@@ -27,7 +28,9 @@ public class UserController {
         return userRest;
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
+            produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails){
 
         UserRest returnedValue = new UserRest();
