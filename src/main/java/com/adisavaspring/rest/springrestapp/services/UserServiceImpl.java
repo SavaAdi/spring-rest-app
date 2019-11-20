@@ -101,4 +101,15 @@ public class UserServiceImpl implements UserService{
 
         return updatedUser;
     }
+
+    @Override
+    public void deleteUser(String userId) {
+
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(userEntity == null)
+            throw new UsernameNotFoundException(userId);
+
+        userRepository.delete(userEntity);
+    }
 }

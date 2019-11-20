@@ -6,6 +6,7 @@ import com.adisavaspring.rest.springrestapp.model.response.UserRest;
 import com.adisavaspring.rest.springrestapp.services.UserService;
 import com.adisavaspring.rest.springrestapp.shared.UserDto;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class UserController {
         return userRest;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(
             consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
@@ -47,6 +49,7 @@ public class UserController {
         return returnedValue;
     }
 
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "/{id}",
             consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE } )
@@ -62,8 +65,12 @@ public class UserController {
         return returnedValue;
     }
 
-    @DeleteMapping
-    public String deleteUser(){
-        return "delete user was called";
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE } )
+    public String deleteUser(@PathVariable String id){
+        
+        String userId = userService.getUserByUserId(id).getUserId();
+        userService.deleteUser(id);
+        return "User " + userId + " was deleted";
     }
 }
