@@ -1,5 +1,6 @@
 package com.adisavaspring.rest.springrestapp.controllers;
 
+import com.adisavaspring.rest.springrestapp.exceptions.UserServiceException;
 import com.adisavaspring.rest.springrestapp.model.request.UserDetailsRequestModel;
 import com.adisavaspring.rest.springrestapp.model.response.UserRest;
 import com.adisavaspring.rest.springrestapp.services.UserService;
@@ -31,7 +32,10 @@ public class UserController {
     @PostMapping(
             consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails){
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception{
+
+        if(userDetails.getEmail().isEmpty() || userDetails.getFirstName().isEmpty())
+            throw new UserServiceException("Please fill Email and first name");
 
         UserRest returnedValue = new UserRest();
         UserDto userDto = new UserDto();
